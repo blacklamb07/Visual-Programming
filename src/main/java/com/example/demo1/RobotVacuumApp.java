@@ -41,7 +41,7 @@ public class RobotVacuumApp extends Application {
         root.setStyle("-fx-background-color: #0F172A;");
 
         Scene scene = new Scene(root, 1220, 780);
-        primaryStage.setTitle("Robot Süpürge Simülasyonu - BZ214 Visual Programming");
+        primaryStage.setTitle("Robot Süpürge Simülasyonu - Visual Programming");
         primaryStage.setScene(scene);
 
         primaryStage.setResizable(true);

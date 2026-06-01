@@ -28,30 +28,31 @@ public class RobotVacuumController {
         view.getCanvas().setOnMouseClicked(this::handleMouse);
         view.getCanvas().setOnMouseDragged(this::handleMouse);
 
-        view.btnStart.setOnAction(e -> { model.setRunning(true); model.updateElapsedTime(); });
-        view.btnPause.setOnAction(e -> model.setRunning(false));
-        view.btnReset.setOnAction(e -> {
+        // Controller artık doğrudan view.btnStart yerine view.getBtnStart() kullanıyor
+        view.getBtnStart().setOnAction(e -> { model.setRunning(true); model.updateElapsedTime(); });
+        view.getBtnPause().setOnAction(e -> model.setRunning(false));
+        view.getBtnReset().setOnAction(e -> {
             model.reset();
             view.resetVisuals();
             view.draw(model);
             view.updateStats(model);
         });
-        view.btnReturn.setOnAction(e -> {
+        view.getBtnReturn().setOnAction(e -> {
             model.triggerReturnToBase();
         });
 
-        view.algoGroup.selectedToggleProperty().addListener((obs, old, val) -> {
-            if(val == view.rbAkilli) model.setCurrentAlgo(Algorithm.AKILLI);
-            else if(val == view.rbRandom) model.setCurrentAlgo(Algorithm.RASTGELE);
-            else if(val == view.rbSpiral) model.setCurrentAlgo(Algorithm.SPIRAL);
-            else if(val == view.rbWall) model.setCurrentAlgo(Algorithm.DUVAR_TAKIP);
+        view.getAlgoGroup().selectedToggleProperty().addListener((obs, old, val) -> {
+            if(val == view.getRbAkilli()) model.setCurrentAlgo(Algorithm.AKILLI);
+            else if(val == view.getRbRandom()) model.setCurrentAlgo(Algorithm.RASTGELE);
+            else if(val == view.getRbSpiral()) model.setCurrentAlgo(Algorithm.SPIRAL);
+            else if(val == view.getRbWall()) model.setCurrentAlgo(Algorithm.DUVAR_TAKIP);
         });
 
         model.setCurrentAlgo(Algorithm.AKILLI);
 
-        view.speedSlider.valueProperty().addListener((obs, old, val) -> {
+        view.getSpeedSlider().valueProperty().addListener((obs, old, val) -> {
             model.setSpeedMultiplier(val.doubleValue());
-            view.speedValueLabel.setText(String.format("%.1fx", val.doubleValue()));
+            view.getSpeedValueLabel().setText(String.format("%.1fx", val.doubleValue()));
         });
     }
 
@@ -61,17 +62,17 @@ public class RobotVacuumController {
 
         if (x < 0 || x >= VacuumModel.COLS || y < 0 || y >= VacuumModel.ROWS) return;
 
-        Cell cell = model.getCell(x, y);
+        Cell cell = model.getGrid()[x][y];
         if (cell.type == CellType.BASE || (x == model.getRobotX() && y == model.getRobotY())) return;
 
-        if (view.btnAddFurn.isSelected()) {
+        if (view.getBtnAddFurn().isSelected()) {
             cell.type = CellType.FURNITURE;
             cell.dirt = DirtType.NONE;
             model.calculateAreas();
-        } else if (view.btnAddDirt.isSelected() && cell.type != CellType.FURNITURE) {
-            if (view.rbDust.isSelected()) cell.dirt = DirtType.DUST;
-            else if (view.rbLiquid.isSelected()) cell.dirt = DirtType.LIQUID;
-            else if (view.rbStain.isSelected()) cell.dirt = DirtType.STAIN;
+        } else if (view.getBtnAddDirt().isSelected() && cell.type != CellType.FURNITURE) {
+            if (view.getRbDust().isSelected()) cell.dirt = DirtType.DUST;
+            else if (view.getRbLiquid().isSelected()) cell.dirt = DirtType.LIQUID;
+            else if (view.getRbStain().isSelected()) cell.dirt = DirtType.STAIN;
             cell.isCleaned = false;
             model.calculateAreas();
         }
@@ -81,7 +82,6 @@ public class RobotVacuumController {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // 1. Mantıksal Güncelleme (Hıza bağlı olarak belli aralıklarla çalışır)
                 double speed = model.getSpeedMultiplier();
                 long interval = (long)(100_000_000 / (2.5 * speed));
                 if (now - lastLogicalUpdate >= interval) {
@@ -92,8 +92,6 @@ public class RobotVacuumController {
                     }
                     lastLogicalUpdate = now;
                 }
-
-                // 2. Görsel Güncelleme (Saniyede 60 kare, her daim çalışır. Pürüzsüz animasyonu sağlar)
                 view.draw(model);
             }
         };

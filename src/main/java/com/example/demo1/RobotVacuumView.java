@@ -17,7 +17,6 @@ import java.util.Arrays;
 
 public class RobotVacuumView {
     private final Canvas canvas;
-    // Haritanın yüksekliğini ekranınıza daha iyi oturtmak için marginY biraz küçültüldü
     private final int cellSize = 42;
     private final int marginX = 35;
     private final int marginY = 25;
@@ -30,39 +29,40 @@ public class RobotVacuumView {
     private final HBox bottomPanel;
     private final HBox headerPanel;
 
-    public final ToggleButton btnAddDirt = new ToggleButton("❄ Kir Ekle");
-    public final ToggleButton btnAddFurn = new ToggleButton("🛋 Mobilya Ekle");
-    public final ToggleGroup toolGroup = new ToggleGroup();
+    // --- MVC GEREĞİ BÜTÜN ARAYÜZ ELEMANLARI PRIVATE YAPILDI ---
+    private final ToggleButton btnAddDirt = new ToggleButton("❄ Kir Ekle");
+    private final ToggleButton btnAddFurn = new ToggleButton("🛋 Mobilya Ekle");
+    private final ToggleGroup toolGroup = new ToggleGroup();
 
-    public final ToggleGroup dirtGroup = new ToggleGroup();
-    public final ToggleButton rbDust = new ToggleButton("Toz");
-    public final ToggleButton rbLiquid = new ToggleButton("Sıvı");
-    public final ToggleButton rbStain = new ToggleButton("Leke");
+    private final ToggleGroup dirtGroup = new ToggleGroup();
+    private final ToggleButton rbDust = new ToggleButton("Toz");
+    private final ToggleButton rbLiquid = new ToggleButton("Sıvı");
+    private final ToggleButton rbStain = new ToggleButton("Leke");
 
-    public final ToggleGroup algoGroup = new ToggleGroup();
-    public final RadioButton rbAkilli = new RadioButton("Akıllı (LIDAR)");
-    public final RadioButton rbRandom = new RadioButton("Rastgele");
-    public final RadioButton rbSpiral = new RadioButton("Spiral");
-    public final RadioButton rbWall = new RadioButton("Duvar Takip");
+    private final ToggleGroup algoGroup = new ToggleGroup();
+    private final RadioButton rbAkilli = new RadioButton("Akıllı (LIDAR)");
+    private final RadioButton rbRandom = new RadioButton("Rastgele");
+    private final RadioButton rbSpiral = new RadioButton("Spiral");
+    private final RadioButton rbWall = new RadioButton("Duvar Takip");
 
-    public final Slider speedSlider = new Slider(1.0, 3.0, 1.5);
-    public final Label speedValueLabel = new Label("1.5x");
+    private final Slider speedSlider = new Slider(1.0, 3.0, 1.5);
+    private final Label speedValueLabel = new Label("1.5x");
 
-    public final ProgressBar batteryBar = new ProgressBar(1.0);
-    public final Label lblPos = new Label();
-    public final Label lblDir = new Label();
-    public final Label lblBatteryPercent = new Label();
+    private final ProgressBar batteryBar = new ProgressBar(1.0);
+    private final Label lblPos = new Label();
+    private final Label lblDir = new Label();
+    private final Label lblBatteryPercent = new Label();
 
-    public final Label lblTotalArea = new Label();
-    public final Label lblCleanedArea = new Label();
-    public final Label lblRemainingArea = new Label();
-    public final Label lblTime = new Label();
-    public final Label lblDustCollected = new Label();
+    private final Label lblTotalArea = new Label();
+    private final Label lblCleanedArea = new Label();
+    private final Label lblRemainingArea = new Label();
+    private final Label lblTime = new Label();
+    private final Label lblDustCollected = new Label();
 
-    public final Button btnStart = new Button("▶ Başlat");
-    public final Button btnPause = new Button("⏸ Duraklat");
-    public final Button btnReset = new Button("⏹ Sıfırla");
-    public final Button btnReturn = new Button("🏠 İstasyona Dön");
+    private final Button btnStart = new Button("▶ Başlat");
+    private final Button btnPause = new Button("⏸ Duraklat");
+    private final Button btnReset = new Button("⏹ Sıfırla");
+    private final Button btnReturn = new Button("🏠 İstasyona Dön");
 
     private final String colorBg = "#0B1120";
     private final String colorPanelBg = "#151F32";
@@ -80,10 +80,10 @@ public class RobotVacuumView {
     }
 
     private void setupHeader() {
-        headerPanel.setPadding(new Insets(10, 20, 10, 20)); // Dikey boşluk daraltıldı
+        headerPanel.setPadding(new Insets(10, 20, 10, 20));
         headerPanel.setAlignment(Pos.CENTER);
         headerPanel.setStyle("-fx-background-color: " + colorBg + ";");
-        headerPanel.setMinHeight(50); // Minimum yükseklik koruması
+        headerPanel.setMinHeight(50);
 
         Label title = new Label("🤖 Akıllı Robot Süpürge Simülasyonu ✨");
         title.setTextFill(Color.WHITE);
@@ -94,7 +94,7 @@ public class RobotVacuumView {
     private void setupLeftPanel() {
         leftPanel.setPadding(new Insets(15));
         leftPanel.setPrefWidth(290);
-        leftPanel.setMinWidth(290); // Sol panel daralmasın
+        leftPanel.setMinWidth(290);
         leftPanel.setStyle("-fx-background-color: " + colorPanelBg + "; -fx-border-color: #1E293B; -fx-border-width: 0 1 0 0;");
 
         String toggleStyleBase = "-fx-background-radius: 6; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 8 12; -fx-cursor: hand;";
@@ -215,7 +215,7 @@ public class RobotVacuumView {
         bottomPanel.setStyle("-fx-background-color: " + colorPanelBg + "; -fx-border-color: #1E293B; -fx-border-width: 1 0 0 0; -fx-background-radius: 12; -fx-border-radius: 12;");
         bottomPanel.setAlignment(Pos.CENTER);
         bottomPanel.setSpacing(35);
-        bottomPanel.setMinHeight(85); // HATA DÜZELTME: Ekran darsa bile bu panelin yazıları ezilmeyecek
+        bottomPanel.setMinHeight(85);
 
         bottomPanel.getChildren().addAll(
                 createStatItem(Color.web("#3B82F6"), "Toplam Alan", lblTotalArea),
@@ -248,6 +248,7 @@ public class RobotVacuumView {
         return box;
     }
 
+    // --- GETTER METOTLARI EKLENDİ (CONTROLLER BURADAN ERİŞECEK) ---
     public VBox getLeftPanel() { return leftPanel; }
     public HBox getBottomPanel() { return bottomPanel; }
     public HBox getHeaderPanel() { return headerPanel; }
@@ -255,6 +256,22 @@ public class RobotVacuumView {
     public int getCellSize() { return cellSize; }
     public int getMarginX() { return marginX; }
     public int getMarginY() { return marginY; }
+    public ToggleButton getBtnAddDirt() { return btnAddDirt; }
+    public ToggleButton getBtnAddFurn() { return btnAddFurn; }
+    public ToggleButton getRbDust() { return rbDust; }
+    public ToggleButton getRbLiquid() { return rbLiquid; }
+    public ToggleButton getRbStain() { return rbStain; }
+    public ToggleGroup getAlgoGroup() { return algoGroup; }
+    public RadioButton getRbAkilli() { return rbAkilli; }
+    public RadioButton getRbRandom() { return rbRandom; }
+    public RadioButton getRbSpiral() { return rbSpiral; }
+    public RadioButton getRbWall() { return rbWall; }
+    public Slider getSpeedSlider() { return speedSlider; }
+    public Label getSpeedValueLabel() { return speedValueLabel; }
+    public Button getBtnStart() { return btnStart; }
+    public Button getBtnPause() { return btnPause; }
+    public Button getBtnReset() { return btnReset; }
+    public Button getBtnReturn() { return btnReturn; }
 
     private double getTargetAngle(Direction dir) {
         switch (dir) {

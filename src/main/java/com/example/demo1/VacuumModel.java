@@ -45,6 +45,11 @@ public class VacuumModel {
         updateObservables();
     }
 
+    // --- EKLENEN EKSİK METOT: Controller'ın haritayı okuyabilmesi için ---
+    public Cell[][] getGrid() {
+        return grid;
+    }
+
     public Cell getCell(int x, int y) {
         if (x >= 0 && x < COLS && y >= 0 && y < ROWS) return grid[x][y];
         return null;
